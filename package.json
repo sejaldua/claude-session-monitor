@@ -1,0 +1,155 @@
+{
+  "name": "claude-session-monitor",
+  "displayName": "Claude Session Monitor",
+  "description": "See at a glance which Claude Code chats need you, which are working, and which are idle.",
+  "version": "0.1.4",
+  "publisher": "local",
+  "private": true,
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./out/extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "claude-session-monitor",
+          "title": "Claude Sessions",
+          "icon": "resources/sessions.svg"
+        }
+      ]
+    },
+    "views": {
+      "claude-session-monitor": [
+        {
+          "id": "claudeSessionMonitor.sessions",
+          "name": "Sessions"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "claudeSessionMonitor.refresh",
+        "title": "Claude Sessions: Refresh",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "claudeSessionMonitor.reveal",
+        "title": "Claude Sessions: Go to Chat"
+      },
+      {
+        "command": "claudeSessionMonitor.revealFirstWaiting",
+        "title": "Claude Sessions: Go to the Chat That Needs You"
+      },
+      {
+        "command": "claudeSessionMonitor.focusView",
+        "title": "Claude Sessions: Show Panel"
+      },
+      {
+        "command": "claudeSessionMonitor.openTranscript",
+        "title": "Open Transcript"
+      },
+      {
+        "command": "claudeSessionMonitor.copySessionId",
+        "title": "Copy Session ID"
+      },
+      {
+        "command": "claudeSessionMonitor.debugTabs",
+        "title": "Claude Sessions: Debug Tab Labels"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "claudeSessionMonitor.refresh",
+          "when": "view == claudeSessionMonitor.sessions",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "claudeSessionMonitor.openTranscript",
+          "when": "view == claudeSessionMonitor.sessions && viewItem =~ /^claudeSession\\./",
+          "group": "inline@1"
+        },
+        {
+          "command": "claudeSessionMonitor.copySessionId",
+          "when": "view == claudeSessionMonitor.sessions && viewItem =~ /^claudeSession\\./"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "claudeSessionMonitor.reveal",
+          "when": "false"
+        },
+        {
+          "command": "claudeSessionMonitor.openTranscript",
+          "when": "false"
+        },
+        {
+          "command": "claudeSessionMonitor.copySessionId",
+          "when": "false"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Claude Session Monitor",
+      "properties": {
+        "claudeSessionMonitor.pollIntervalMs": {
+          "type": "number",
+          "default": 5000,
+          "minimum": 1000,
+          "description": "How often to re-scan session state. Polling is what notices a session whose process died, since that produces no filesystem event."
+        },
+        "claudeSessionMonitor.stuckAfterMinutes": {
+          "type": "number",
+          "default": 15,
+          "minimum": 1,
+          "description": "Flag a busy session as possibly stuck when its status has not changed for this many minutes."
+        },
+        "claudeSessionMonitor.openLocation": {
+          "type": "string",
+          "enum": ["sidebar", "panel"],
+          "default": "sidebar",
+          "enumDescriptions": [
+            "Open the chat in the Claude Code sidebar you already have open.",
+            "Open the chat as an editor tab, reusing an existing tab when there is one."
+          ],
+          "description": "Where clicking a session takes you."
+        },
+        "claudeSessionMonitor.showIdle": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the Idle group."
+        },
+        "claudeSessionMonitor.hideEmptyGroups": {
+          "type": "boolean",
+          "default": false,
+          "description": "Hide a group when it has no sessions. Off by default so the layout does not jump around."
+        },
+        "claudeSessionMonitor.claudeHome": {
+          "type": "string",
+          "default": "",
+          "description": "Override the Claude home directory. Empty means ~/.claude."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "vscode:prepublish": "npm run compile"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "@types/vscode": "^1.90.0",
+    "typescript": "^5.5.0"
+  }
+}
