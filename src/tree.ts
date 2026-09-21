@@ -1,6 +1,8 @@
 import * as path from 'path';
 import * as vscode from 'vscode';
 
+import { sessionUri } from './decorations';
+import { relativeAge } from './format';
 import { SessionStore } from './sessionStore';
 import { readTail } from './transcript';
 import { GROUP_LABEL, Session, SessionStatus, STATUS_ORDER } from './types';
@@ -21,29 +23,16 @@ export class MessageNode {
 
 export type Node = GroupNode | SessionNode | MessageNode;
 
-function relativeAge(timestamp: number): string {
-  const seconds = Math.max(0, Math.round((Date.now() - timestamp) / 1000));
-  if (seconds < 60) {
-    return `${seconds}s`;
-  }
-  const minutes = Math.round(seconds / 60);
-  if (minutes < 60) {
-    return `${minutes}m`;
-  }
-  const hours = Math.floor(minutes / 60);
-  return minutes % 60 === 0 ? `${hours}h` : `${hours}h ${minutes % 60}m`;
-}
-
 function icon(session: Session): vscode.ThemeIcon {
   if (session.status === 'waiting') {
-    return new vscode.ThemeIcon('bell-dot', new vscode.ThemeColor('charts.red'));
+    return new vscode.ThemeIcon('bell-dot', new vscode.ThemeColor('claudeSessionMonitor.waiting'));
   }
   if (session.status === 'busy') {
     return session.stuck
-      ? new vscode.ThemeIcon('warning', new vscode.ThemeColor('charts.yellow'))
-      : new vscode.ThemeIcon('sync~spin', new vscode.ThemeColor('charts.blue'));
+      ? new vscode.ThemeIcon('warning', new vscode.ThemeColor('claudeSessionMonitor.stuck'))
+      : new vscode.ThemeIcon('sync~spin', new vscode.ThemeColor('claudeSessionMonitor.busy'));
   }
-  return new vscode.ThemeIcon('circle-outline', new vscode.ThemeColor('descriptionForeground'));
+  return new vscode.ThemeIcon('circle-outline', new vscode.ThemeColor('claudeSessionMonitor.idle'));
 }
 
 function inWorkspace(cwd: string): boolean {
@@ -116,6 +105,8 @@ export class SessionTreeProvider implements vscode.TreeDataProvider<Node> {
     item.id = `${session.pid}:${session.sessionId}`;
     item.iconPath = icon(session);
     item.contextValue = `claudeSession.${session.status}`;
+    // Drives the label colour and badge; see SessionDecorations.
+    item.resourceUri = sessionUri(session);
 
     const age = relativeAge(session.statusUpdatedAt);
     const detail = session.status === 'waiting' ? session.waitingFor ?? 'waiting' : age;

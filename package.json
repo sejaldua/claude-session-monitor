@@ -2,7 +2,7 @@
   "name": "claude-session-monitor",
   "displayName": "Claude Session Monitor",
   "description": "See at a glance which Claude Code chats need you, which are working, and which are idle.",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "publisher": "local",
   "private": true,
   "license": "MIT",
@@ -99,6 +99,32 @@
         }
       ]
     },
+    "colors": [
+      {
+        "id": "claudeSessionMonitor.waiting",
+        "description": "A session blocked on you.",
+        "defaults": { "dark": "#f14c4c", "light": "#cd3131", "highContrast": "#f14c4c" }
+      },
+      {
+        "id": "claudeSessionMonitor.stuck",
+        "description": "A busy session whose status has not changed in a while.",
+        "defaults": { "dark": "#e5c07b", "light": "#b8860b", "highContrast": "#e5c07b" }
+      },
+      {
+        "id": "claudeSessionMonitor.busy",
+        "description": "A session working on its own.",
+        "defaults": { "dark": "#4fc1ff", "light": "#0070c1", "highContrast": "#4fc1ff" }
+      },
+      {
+        "id": "claudeSessionMonitor.idle",
+        "description": "A session with nothing in flight.",
+        "defaults": {
+          "dark": "descriptionForeground",
+          "light": "descriptionForeground",
+          "highContrast": "descriptionForeground"
+        }
+      }
+    ],
     "configuration": {
       "title": "Claude Session Monitor",
       "properties": {
@@ -123,6 +149,22 @@
             "Open the chat as an editor tab, reusing an existing tab when there is one."
           ],
           "description": "Where clicking a session takes you."
+        },
+        "claudeSessionMonitor.notifyWhenWaiting": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show a notification when a session newly needs you. Only transitions are announced, never the standing set."
+        },
+        "claudeSessionMonitor.escalateAfterMinutes": {
+          "type": "number",
+          "default": 2,
+          "minimum": 0,
+          "description": "How long a session waits before the status bar turns from amber to red."
+        },
+        "claudeSessionMonitor.statusBarPulse": {
+          "type": "boolean",
+          "default": false,
+          "description": "Blink the status bar bell while a session is waiting."
         },
         "claudeSessionMonitor.showIdle": {
           "type": "boolean",

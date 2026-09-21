@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.2.0
+
+- Colour row labels by state through a `FileDecorationProvider`, with a badge
+  on blocked and stuck rows. Tinting a tree item's icon is possible; colouring
+  its label is not, which is why this needs a decoration provider.
+- Contribute four themeable colours: `claudeSessionMonitor.waiting`, `.stuck`,
+  `.busy`, `.idle`.
+- Status bar now shows how long the oldest blocked session has waited, and
+  escalates from amber to red past `escalateAfterMinutes`.
+- Optional blinking bell via `statusBarPulse`.
+- Notify when a session newly blocks, with "Go to chat" and "Mute these"
+  actions. Transitions only, and the first scan after activation primes
+  silently so a window reload does not produce a burst of toasts.
+- Rewrote the README for a general audience.
+
 ## 0.1.4
 
 - Collapse rows that describe the same chat. One chat can be served by several
