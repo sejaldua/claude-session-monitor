@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.3.0
+
+- The panel is a webview instead of a tree. A TreeItem offers an icon, a label,
+  a dim description and a decoration colour, which cannot express bars,
+  columns, cards or sparklines. Theming is unaffected, since VS Code exposes
+  every theme colour to a webview as a `--vscode-*` property, contributed
+  colours included, and `WebviewView` carries a badge like a tree does.
+- Four row styles, switchable from the view title bar or
+  **Claude Sessions: Change Row Style**: `rail`, `duration`, `ledger`, `pulse`.
+- `showHeadline` lifts each blocked session into a card with the reason and a
+  button. It composes with any row style.
+- `pulse` keeps a 20 slot ring buffer per session sampled every 30 seconds,
+  covering ten minutes. Memory only, discarded on reload.
+- Keyboard activation and a context menu are hand-built, since a webview gets
+  neither for free.
+- Removed `hideEmptyGroups`, which described groups that no longer exist.
+
 ## 0.2.0
 
 - Colour row labels by state through a `FileDecorationProvider`, with a badge

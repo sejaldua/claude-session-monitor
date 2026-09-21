@@ -2,7 +2,7 @@
   "name": "claude-session-monitor",
   "displayName": "Claude Session Monitor",
   "description": "See at a glance which Claude Code chats need you, which are working, and which are idle.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "publisher": "local",
   "private": true,
   "license": "MIT",
@@ -29,7 +29,8 @@
     "views": {
       "claude-session-monitor": [
         {
-          "id": "claudeSessionMonitor.sessions",
+          "id": "claudeSessionMonitor.panel",
+          "type": "webview",
           "name": "Sessions"
         }
       ]
@@ -41,10 +42,6 @@
         "icon": "$(refresh)"
       },
       {
-        "command": "claudeSessionMonitor.reveal",
-        "title": "Claude Sessions: Go to Chat"
-      },
-      {
         "command": "claudeSessionMonitor.revealFirstWaiting",
         "title": "Claude Sessions: Go to the Chat That Needs You"
       },
@@ -53,12 +50,13 @@
         "title": "Claude Sessions: Show Panel"
       },
       {
-        "command": "claudeSessionMonitor.openTranscript",
-        "title": "Open Transcript"
+        "command": "claudeSessionMonitor.chooseLayout",
+        "title": "Claude Sessions: Change Row Style",
+        "icon": "$(list-selection)"
       },
       {
-        "command": "claudeSessionMonitor.copySessionId",
-        "title": "Copy Session ID"
+        "command": "claudeSessionMonitor.toggleHeadline",
+        "title": "Claude Sessions: Toggle Headline Card"
       },
       {
         "command": "claudeSessionMonitor.debugTabs",
@@ -68,34 +66,18 @@
     "menus": {
       "view/title": [
         {
+          "command": "claudeSessionMonitor.chooseLayout",
+          "when": "view == claudeSessionMonitor.panel",
+          "group": "navigation@1"
+        },
+        {
           "command": "claudeSessionMonitor.refresh",
-          "when": "view == claudeSessionMonitor.sessions",
-          "group": "navigation"
-        }
-      ],
-      "view/item/context": [
-        {
-          "command": "claudeSessionMonitor.openTranscript",
-          "when": "view == claudeSessionMonitor.sessions && viewItem =~ /^claudeSession\\./",
-          "group": "inline@1"
+          "when": "view == claudeSessionMonitor.panel",
+          "group": "navigation@2"
         },
         {
-          "command": "claudeSessionMonitor.copySessionId",
-          "when": "view == claudeSessionMonitor.sessions && viewItem =~ /^claudeSession\\./"
-        }
-      ],
-      "commandPalette": [
-        {
-          "command": "claudeSessionMonitor.reveal",
-          "when": "false"
-        },
-        {
-          "command": "claudeSessionMonitor.openTranscript",
-          "when": "false"
-        },
-        {
-          "command": "claudeSessionMonitor.copySessionId",
-          "when": "false"
+          "command": "claudeSessionMonitor.toggleHeadline",
+          "when": "view == claudeSessionMonitor.panel"
         }
       ]
     },
@@ -150,6 +132,23 @@
           ],
           "description": "Where clicking a session takes you."
         },
+        "claudeSessionMonitor.rowStyle": {
+          "type": "string",
+          "enum": ["rail", "duration", "ledger", "pulse"],
+          "default": "rail",
+          "enumDescriptions": [
+            "One sorted list, state as a stripe on the edge.",
+            "Bars showing how long each session has held its state, on a log scale.",
+            "Aligned columns. Densest, and the only style that holds up past eight sessions.",
+            "A sparkline of what each session has been doing over the last ten minutes."
+          ],
+          "description": "How session rows are drawn."
+        },
+        "claudeSessionMonitor.showHeadline": {
+          "type": "boolean",
+          "default": true,
+          "description": "Lift each blocked session into a card above the list, with the reason and a button."
+        },
         "claudeSessionMonitor.notifyWhenWaiting": {
           "type": "boolean",
           "default": true,
@@ -169,12 +168,7 @@
         "claudeSessionMonitor.showIdle": {
           "type": "boolean",
           "default": true,
-          "description": "Show the Idle group."
-        },
-        "claudeSessionMonitor.hideEmptyGroups": {
-          "type": "boolean",
-          "default": false,
-          "description": "Hide a group when it has no sessions. Off by default so the layout does not jump around."
+          "description": "List idle sessions. Turn off to show only what is working or blocked."
         },
         "claudeSessionMonitor.claudeHome": {
           "type": "string",

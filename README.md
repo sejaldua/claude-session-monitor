@@ -19,7 +19,25 @@ Idle (2)
 Rows are named after what the session is actually doing, covering every project
 on your machine.
 
-How it gets your attention, in increasing order of insistence:
+## Four ways to draw the list
+
+The panel is a webview, so rows are not limited to what a tree can express.
+Switch with **Claude Sessions: Change Row Style**, or the icon in the view
+title bar.
+
+| Style | What it is | Best when |
+| --- | --- | --- |
+| `rail` | One sorted list, state as a stripe on the edge | You want the quietest possible panel |
+| `duration` | Bars sized by time in the current state, log scale | You care how long, not just what |
+| `ledger` | Aligned columns, session / project / age | You run more than eight sessions |
+| `pulse` | A sparkline of the last ten minutes per session | You want to spot a session that keeps stalling |
+
+Independently of the style, `showHeadline` lifts each blocked session into a
+card above the list with the reason and a button. Turn it off for a flat list.
+
+## How it gets your attention
+
+In increasing order of insistence:
 
 - **Colour.** Row labels are tinted by state, red for blocked, blue for
   working, amber for a session that has been busy too long without changing.
@@ -48,14 +66,15 @@ Reload the window and look for the Claude Sessions icon in the activity bar.
 
 | Setting | Default | |
 | --- | --- | --- |
+| `rowStyle` | `rail` | `rail`, `duration`, `ledger` or `pulse` |
+| `showHeadline` | `true` | Lift blocked sessions into a card above the list |
 | `openLocation` | `sidebar` | Open clicked chats in the Claude sidebar or an editor tab |
 | `notifyWhenWaiting` | `true` | Notify when a session newly needs you |
 | `escalateAfterMinutes` | `2` | When the status bar turns from amber to red |
 | `statusBarPulse` | `false` | Blink the status bar bell while waiting |
 | `pollIntervalMs` | `5000` | How often to re-scan |
 | `stuckAfterMinutes` | `15` | Warn when a busy session stops changing status |
-| `showIdle` | `true` | Show the Idle group |
-| `hideEmptyGroups` | `false` | Hide groups with no sessions |
+| `showIdle` | `true` | List idle sessions at all |
 | `claudeHome` | `~/.claude` | Override the Claude directory |
 
 All prefixed `claudeSessionMonitor.`. The four state colours are contributed as
