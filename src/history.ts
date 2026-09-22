@@ -3,8 +3,8 @@ import { Session } from './types';
 /** One sample of what a session was doing. 'gone' pads the time before we saw it. */
 export type Sample = 'waiting' | 'busy' | 'stuck' | 'idle' | 'gone';
 
-/** 20 slots at one sample every 30s covers the last ten minutes. */
-export const SLOTS = 20;
+/** 40 slots at one sample every 30s covers the last twenty minutes. */
+export const SLOTS = 40;
 export const SAMPLE_MS = 30_000;
 
 function sampleOf(session: Session): Sample {

@@ -140,7 +140,7 @@
             "One sorted list, state as a stripe on the edge.",
             "Bars showing how long each session has held its state, on a log scale.",
             "Aligned columns. Densest, and the only style that holds up past eight sessions.",
-            "A sparkline of what each session has been doing over the last ten minutes."
+            "A sparkline of what each session has been doing over the last twenty minutes."
           ],
           "description": "How session rows are drawn."
         },

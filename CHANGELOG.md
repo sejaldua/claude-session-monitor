@@ -11,8 +11,8 @@
   **Claude Sessions: Change Row Style**: `rail`, `duration`, `ledger`, `pulse`.
 - `showHeadline` lifts each blocked session into a card with the reason and a
   button. It composes with any row style.
-- `pulse` keeps a 20 slot ring buffer per session sampled every 30 seconds,
-  covering ten minutes. Memory only, discarded on reload.
+- `pulse` keeps a 40 slot ring buffer per session sampled every 30 seconds,
+  covering twenty minutes. Memory only, discarded on reload.
 - Keyboard activation and a context menu are hand-built, since a webview gets
   neither for free.
 - Removed `hideEmptyGroups`, which described groups that no longer exist.

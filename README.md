@@ -35,7 +35,7 @@ title bar.
 | `rail` | One sorted list, state as a stripe on the edge | You want the quietest possible panel |
 | `duration` | Bars sized by time in the current state, log scale | You care how long, not just what |
 | `ledger` | Aligned columns, session / project / age | You run more than eight sessions |
-| `pulse` | A sparkline of the last ten minutes per session | You want to spot a session that keeps stalling |
+| `pulse` | A sparkline of the last twenty minutes per session | You want to spot a session that keeps stalling |
 
 Independently of the style, `showHeadline` lifts each blocked session into a
 card above the list with the reason and a button. Turn it off for a flat list.
