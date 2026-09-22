@@ -6,18 +6,23 @@ are working, and which are idle. Click one to jump to that chat.
 Run several Claude Code sessions at once and they all look the same. This tells
 you which one is sitting on a permission prompt.
 
+The default view, `rail` rows with the headline card on:
+
 ```
-Needs you (1)
-  🔴 Refactor auth middleware           my-project-4f · permission prompt
-Working (1)
-  🔄 Investigate flaky integration test my-project-c8 · 2s
-Idle (2)
-  ⚪ Port the CLI to async              my-project-ae · 18m
-  ⚪ Document the release process       other-repo-52 · 2h 44m
+ ┌──────────────────────────────────────────┐
+ │ NEEDS YOU · 6m                           │
+ │ Refactor auth middleware                 │
+ │ Permission prompt in web-app             │
+ │ [ Go to chat ]                           │
+ └──────────────────────────────────────────┘
+   3 OTHERS
+ ▍ Investigate flaky integration test    2s
+ ▍ Port the CLI to async                18m
+ ▍ Document the release process      2h 44m
 ```
 
 Rows are named after what the session is actually doing, covering every project
-on your machine.
+on your machine, sorted with whatever is most urgent on top.
 
 ## Four ways to draw the list
 
@@ -39,9 +44,9 @@ card above the list with the reason and a button. Turn it off for a flat list.
 
 In increasing order of insistence:
 
-- **Colour.** Row labels are tinted by state, red for blocked, blue for
-  working, amber for a session that has been busy too long without changing.
-  All four colours are themeable.
+- **Colour.** Every row carries its state as colour, red for blocked, blue for
+  working, amber for a session that has been busy too long without changing,
+  grey for idle. All four are themeable.
 - **Badge.** The activity bar icon carries a count of blocked sessions.
 - **Status bar.** Appears only when something is blocked, showing how long the
   oldest one has waited. Amber at first, red past a threshold you set.
@@ -86,7 +91,7 @@ through `workbench.colorCustomizations`.
 Claude Code writes a status file per running session at
 `~/.claude/sessions/<pid>.json` containing `status` (`busy`, `idle`, or
 `waiting`) and, when waiting, why. The extension watches that directory and
-groups what it finds. Conversation transcripts are read only for row titles.
+sorts what it finds. Conversation transcripts are read only for row titles.
 
 It deliberately does not infer state from the transcripts. A session blocked on
 a permission prompt and one running a long tool call look identical in the
